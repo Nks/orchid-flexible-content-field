@@ -7,10 +7,9 @@ namespace Nakukryskin\OrchidFlexibleContentField\Screen\Fields;
 use Orchid\Screen\Field;
 
 /**
- * Creating flexible content fields
+ * Creating flexible content fields.
  *
  * Class FlexibleContentField
- * @package Nakukryskin\OrchidFlexibleContentField
  *
  * @method $this required($value = true)
  * @method $this help(string $value = null)
@@ -20,12 +19,11 @@ use Orchid\Screen\Field;
 class FlexibleContentField extends Field
 {
     /**
-     * View name
+     * View name.
      *
      * @var string
      */
     public $view = 'platform::fields.flexible_content';
-
 
     protected $layout;
 
@@ -36,7 +34,7 @@ class FlexibleContentField extends Field
      */
     public $required = [
         'name',
-        'layouts'
+        'layouts',
     ];
 
     /**
@@ -46,7 +44,7 @@ class FlexibleContentField extends Field
      */
     public $attributes = [
         'class' => 'form-control',
-        'original_name' => null
+        'original_name' => null,
     ];
 
     /**
@@ -56,21 +54,19 @@ class FlexibleContentField extends Field
      */
     public $inlineAttributes = [
         'required',
-        'name'
+        'name',
     ];
 
     public function layouts(array $layouts): self
     {
         $this->set('layouts', collect(array_map(function () {
-
         }, $layouts)));
 
         return $this;
     }
 
-
     /**
-     * Creating an instance of the repeater field
+     * Creating an instance of the repeater field.
      *
      * @param string $name
      * @return FlexibleContentField
