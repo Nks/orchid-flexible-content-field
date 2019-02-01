@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Nakukryskin\OrchidFlexibleContentField\Providers;
 
+use Orchid\Platform\Dashboard;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Nakukryskin\OrchidFlexibleContentField\Screen\Fields\FlexibleContentField;
-use Orchid\Platform\Dashboard;
 
 /**
- * Class ServiceProvider
- * @package Nakukryskin\OrchidFlexibleContentField\Providers
+ * Class ServiceProvider.
  */
 class ServiceProvider extends BaseServiceProvider
 {
@@ -34,7 +33,7 @@ class ServiceProvider extends BaseServiceProvider
             ->registerDatabase()
             ->registerProviders();
 
-        $this->loadViewsFrom(ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH . '/resources/views', 'platform');
+        $this->loadViewsFrom(ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH.'/resources/views', 'platform');
 
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
@@ -49,8 +48,8 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function register()
     {
-        if (!defined('ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH')) {
-            define('ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH', realpath(__DIR__ . '/../../'));
+        if (! defined('ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH')) {
+            define('ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH', realpath(__DIR__.'/../../'));
         }
 
         // Register the service the package provides.
@@ -60,7 +59,7 @@ class ServiceProvider extends BaseServiceProvider
     }
 
     /**
-     * Register providers
+     * Register providers.
      */
     public function registerProviders(): void
     {
@@ -77,7 +76,7 @@ class ServiceProvider extends BaseServiceProvider
     public function provides(): array
     {
         return [
-            EventServiceProvider::class
+            EventServiceProvider::class,
         ];
     }
 
@@ -90,12 +89,12 @@ class ServiceProvider extends BaseServiceProvider
     {
         // Publishing the views.
         $this->publishes([
-            ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH . '/resources/views' => base_path('resources/views/vendor/platform'),
+            ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH.'/resources/views' => base_path('resources/views/vendor/platform'),
         ], 'platform');
 
         // Publishing assets.
         $this->publishes([
-            ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH . '/resources/public' => public_path('vendor/platform/flexible-content-field'),
+            ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH.'/resources/public' => public_path('vendor/platform/flexible-content-field'),
         ], 'flexible-content-field.assets');
 
         return $this;
@@ -108,19 +107,19 @@ class ServiceProvider extends BaseServiceProvider
      */
     protected function registerDatabase()
     {
-        $this->loadMigrationsFrom(realpath(ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH . '/database/migrations'));
+        $this->loadMigrationsFrom(realpath(ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH.'/database/migrations'));
 
         return $this;
     }
 
     /**
-     * Registering resources
+     * Registering resources.
      *
      * @throws \Exception
      */
     private function registerResources(): self
     {
-        if (!file_exists(public_path('vendor/platform/flexible-content-field'))) {
+        if (! file_exists(public_path('vendor/platform/flexible-content-field'))) {
             return $this;
         }
 

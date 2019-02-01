@@ -3,8 +3,8 @@
 namespace Nakukryskin\OrchidFlexibleContentField\Screen\Layouts;
 
 use Orchid\Screen\Builder;
-use Orchid\Screen\Layouts\Base;
 use Orchid\Screen\Repository;
+use Orchid\Screen\Layouts\Base;
 
 abstract class FlexibleContentLayout extends Base
 {
@@ -35,21 +35,21 @@ abstract class FlexibleContentLayout extends Base
     }
 
     /**
-     * Return name of the layout such a 'gallery'
+     * Return name of the layout such a 'gallery'.
      *
      * @return string
      */
     abstract public function name(): string;
 
     /**
-     * Return title of layout such a "Gallery"
+     * Return title of layout such a "Gallery".
      *
      * @return string
      */
     abstract public function title(): string;
 
     /**
-     * Return array of the fields
+     * Return array of the fields.
      *
      * @return array
      */
