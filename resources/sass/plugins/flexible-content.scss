@@ -1,0 +1,42 @@
+.flexible-content {
+  .content {
+    .no-value-message {
+      padding: 20px;
+      border: #ccc dashed 2px;
+      text-align: center;
+      display: none;
+    }
+
+    &.empty {
+      .no-value-message {
+        display: block;
+      }
+    }
+  }
+
+  .card {
+    margin-top: 1rem;
+
+    &:first-child {
+      margin-top: 0;
+    }
+    > .card-header {
+      .actions {
+        span {
+          &.action {
+            cursor: pointer;
+          }
+
+          &.badge {
+            opacity: 0.3;
+          }
+        }
+      }
+    }
+  }
+
+
+  &-layouts {
+    display: none;
+  }
+}

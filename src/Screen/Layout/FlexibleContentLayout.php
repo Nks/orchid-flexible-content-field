@@ -2,16 +2,19 @@
 
 namespace Nakukryskin\OrchidFlexibleContentField\Screen\Layouts;
 
+use Nakukryskin\OrchidFlexibleContentField\Screen\Fields\FlexibleContentField;
 use Orchid\Screen\Builder;
-use Orchid\Screen\Repository;
 use Orchid\Screen\Layouts\Base;
+use Orchid\Screen\Repository;
 
 abstract class FlexibleContentLayout extends Base
 {
     /**
+     * Current template
+     *
      * @var string
      */
-    public $template = 'platform::container.layouts.row';
+    public $template = 'platform::container.layouts.flexible_content_row';
 
     /**
      * @var Repository
@@ -19,6 +22,34 @@ abstract class FlexibleContentLayout extends Base
     public $query;
 
     /**
+     * Original flexible content field.
+     *
+     * @var FlexibleContentField
+     */
+    public $field;
+
+    /**
+     * Minimum layouts.
+     *
+     * @var integer
+     */
+    public $min;
+
+    /**
+     * Maximum layouts.
+     *
+     * @var integer
+     */
+    public $max;
+
+    public function __construct(FlexibleContentField $field)
+    {
+        $this->field = $field;
+    }
+
+    /**
+     * Building the form based on configuration.
+     *
      * @param \Orchid\Screen\Repository $query
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -29,7 +60,10 @@ abstract class FlexibleContentLayout extends Base
         $this->query = $query;
         $form = new Builder($this->fields(), $query);
 
+        $form->setPrefix($this->getFormPrefix());
+
         return view($this->template, [
+            'name' => $this->name(),
             'form' => $form->generateForm(),
         ]);
     }
@@ -54,4 +88,16 @@ abstract class FlexibleContentLayout extends Base
      * @return array
      */
     abstract public function fields(): array;
+
+
+    /**
+     * Return full prefix for the flexible content fields.
+     *
+     * @return string
+     */
+    private function getFormPrefix()
+    {
+
+        return $this->field->get('name').'[:flexibleindex]['.$this->name().']';
+    }
 }

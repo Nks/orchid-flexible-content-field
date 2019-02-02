@@ -59,7 +59,8 @@ class FlexibleContentField extends Field
 
     public function layouts(array $layouts): self
     {
-        $this->set('layouts', collect(array_map(function () {
+        $this->set('layouts', collect(array_map(function ($item) {
+            return new $item($this);
         }, $layouts)));
 
         return $this;
