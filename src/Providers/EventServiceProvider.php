@@ -9,7 +9,8 @@ use Nakukryskin\OrchidFlexibleContentField\Observers\FlexibleContentObserver;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
- * Class EventServiceProvider.
+ * Class EventServiceProvider
+ * @package Nakukryskin\OrchidFlexibleContentField\Providers
  */
 class EventServiceProvider extends ServiceProvider
 {

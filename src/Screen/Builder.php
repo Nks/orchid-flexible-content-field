@@ -1,7 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace Nakukryskin\OrchidFlexibleContentField\Screen;
 
+use Illuminate\Support\Collection;
+use Nakukryskin\OrchidFlexibleContentField\Screen\Layouts\FlexibleContentLayout;
 use Orchid\Screen\Repository;
 
 /**
@@ -13,16 +16,47 @@ use Orchid\Screen\Repository;
 class Builder extends \Orchid\Screen\Builder
 {
     /**
-     * Builder constructor.
+     * Render form with the values
      *
-     * @param string $prefix
-     * @param \Orchid\Screen\Contracts\FieldContract[] $fields
-     * @param Repository $data
+     * @param Collection $layouts
+     * @param array $values
+     * @return null|string
+     * @throws \Throwable
      */
-    public function __construct(string $prefix, array $fields, $data)
+    public static function buildFlexibleLayout(Collection $layouts, array $values)
     {
-        $this->prefix = $prefix;
-        parent::__construct($fields, $data);
-    }
+        $form = '';
+        foreach ($values as $index => $value) {
+            $layoutName = head(array_keys($value));
+            $data = head($value);
 
+            //skip not existing layouts
+            if (!$layouts->has($layoutName)) {
+                continue;
+            }
+
+            /** @var FlexibleContentLayout $layout */
+            $layout = $layouts->get($layoutName);
+
+            throw_if(!($layout instanceof FlexibleContentLayout),
+                new \Exception(sprintf('%s is not flexible content layout', class_basename($layout))));
+
+            //bail the layout
+            $layout = clone $layout;
+
+            $layout->setFieldIndex($index);
+
+            if ($data) {
+                $data = new Repository(collect($data)->mapWithKeys(function ($item, $key) use ($layout) {
+                    return [$layout->getFormPrefix().'.'.$key => $item];
+                })->toArray());
+            }
+
+            $layout->template = FlexibleContentLayout::BLOCK_TEMPLATE;
+
+            $form .= $layout->build($data);
+        }
+
+        return $form;
+    }
 }

@@ -1,14 +1,20 @@
 <?php
+declare(strict_types=1);
 
 namespace Nakukryskin\OrchidFlexibleContentField\Screen\Layouts;
 
+use Nakukryskin\OrchidFlexibleContentField\Screen\Builder;
 use Nakukryskin\OrchidFlexibleContentField\Screen\Fields\FlexibleContentField;
-use Orchid\Screen\Builder;
 use Orchid\Screen\Layouts\Base;
 use Orchid\Screen\Repository;
 
+/**
+ * Class FlexibleContentLayout
+ * @package Nakukryskin\OrchidFlexibleContentField\Screen\Layouts
+ */
 abstract class FlexibleContentLayout extends Base
 {
+    const BLOCK_TEMPLATE = 'platform::partials.fields.flexible_content_block';
     /**
      * Current template
      *
@@ -29,6 +35,13 @@ abstract class FlexibleContentLayout extends Base
     public $field;
 
     /**
+     * Pre-generated field index
+     *
+     * @var string
+     */
+    public $fieldIndex;
+
+    /**
      * Minimum layouts.
      *
      * @var integer
@@ -45,6 +58,7 @@ abstract class FlexibleContentLayout extends Base
     public function __construct(FlexibleContentField $field)
     {
         $this->field = $field;
+        $this->setFieldIndex(':flexibleindex_'.sha1(serialize($this->field)));
     }
 
     /**
@@ -89,15 +103,26 @@ abstract class FlexibleContentLayout extends Base
      */
     abstract public function fields(): array;
 
+    /**
+     * Set the field index for the javascript replacement.
+     * @param string $index
+     * @return FlexibleContentLayout
+     */
+    public function setFieldIndex($index = null): self
+    {
+        $this->fieldIndex = $index;
+
+        return $this;
+    }
 
     /**
      * Return full prefix for the flexible content fields.
      *
      * @return string
      */
-    private function getFormPrefix()
+    public function getFormPrefix()
     {
 
-        return $this->field->get('name').'[:flexibleindex]['.$this->name().']';
+        return $this->field->get('name').'['.$this->fieldIndex.']['.$this->name().']';
     }
 }

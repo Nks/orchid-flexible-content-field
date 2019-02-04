@@ -2,14 +2,16 @@
     <div class="flexible-content"
          data-controller="fields--flexible_content"
          data-name="{{ $name }}">
-        <input type="hidden" name="{{ $name }}" value=""/>
         <div class="row">
             <div class="col-md-12">
-                <section class="content b wrapper-xs mb-2 empty" data-target="fields--flexible_content.content">
+                <section class="content b wrapper-xs mb-2 @if(empty($value)) empty @endif"
+                         data-target="fields--flexible_content.content">
                     <div class="no-value-message">
                         {{ __('Click the "Add Block" button below to start creating your layout') }}
                     </div>
-                    <div data-target="fields--flexible_content.blocks"></div>
+                    <div data-target="fields--flexible_content.blocks">
+                        {!! \Nakukryskin\OrchidFlexibleContentField\Screen\Builder::buildFlexibleLayout($layouts, $value) !!}
+                    </div>
                 </section>
                 <div class="dropdown pull-right dropup">
                     <button class="btn btn-default dropdown-toggle" type="button"
@@ -24,6 +26,7 @@
                                 <a class="dropdown-item" href="#"
                                    data-action="click->fields--flexible_content#layoutSelect"
                                    data-layout="{{ $layout->name() }}"
+                                   data-index="{{ $layout->fieldIndex }}"
                                    data-max="{{ $layout->max }}"
                                    data-min="{{ $layout->min }}">
                                     {{ $layout->title() }}

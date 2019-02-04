@@ -9,7 +9,8 @@ use Nakukryskin\OrchidFlexibleContentField\Screen\Fields\FlexibleContentField;
 use Orchid\Platform\Dashboard;
 
 /**
- * Class ServiceProvider.
+ * Class ServiceProvider
+ * @package Nakukryskin\OrchidFlexibleContentField\Providers
  */
 class ServiceProvider extends BaseServiceProvider
 {
@@ -31,9 +32,10 @@ class ServiceProvider extends BaseServiceProvider
 
         $this->registerResources()
             ->registerDatabase()
-            ->registerProviders();
+            ->registerProviders()
+            ->registerTranslations();
 
-        $this->loadViewsFrom(ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH . '/resources/views', 'platform');
+        $this->loadViewsFrom(ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH.'/resources/views', 'platform');
 
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
@@ -49,7 +51,7 @@ class ServiceProvider extends BaseServiceProvider
     public function register()
     {
         if (!defined('ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH')) {
-            define('ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH', realpath(__DIR__ . '/../../'));
+            define('ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH', realpath(__DIR__.'/../../'));
         }
 
         if (!defined('ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH')) {
@@ -64,12 +66,16 @@ class ServiceProvider extends BaseServiceProvider
 
     /**
      * Register providers.
+     *
+     * @return self
      */
-    public function registerProviders(): void
+    public function registerProviders(): self
     {
         foreach ($this->provides() as $provide) {
             $this->app->register($provide);
         }
+
+        return $this;
     }
 
     /**
@@ -93,12 +99,12 @@ class ServiceProvider extends BaseServiceProvider
     {
         // Publishing the views.
         $this->publishes([
-            ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH . '/resources/views' => base_path('resources/views/vendor/platform'),
+            ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH.'/resources/views' => base_path('resources/views/vendor/platform'),
         ], 'platform');
 
         // Publishing assets.
         $this->publishes([
-            ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH . '/resources/public' => public_path('vendor/platform/flexible-content-field'),
+            ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH.'/resources/public' => public_path('vendor/platform/flexible-content-field'),
         ], 'flexible-content-field.assets');
 
         return $this;
@@ -107,11 +113,11 @@ class ServiceProvider extends BaseServiceProvider
     /**
      * Register migrate.
      *
-     * @return $this
+     * @return self
      */
-    protected function registerDatabase()
+    protected function registerDatabase(): self
     {
-        $this->loadMigrationsFrom(realpath(ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH . '/database/migrations'));
+        $this->loadMigrationsFrom(realpath(ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH.'/database/migrations'));
 
         return $this;
     }
@@ -120,6 +126,7 @@ class ServiceProvider extends BaseServiceProvider
      * Registering resources.
      *
      * @throws \Exception
+     * @return self
      */
     private function registerResources(): self
     {
@@ -131,6 +138,18 @@ class ServiceProvider extends BaseServiceProvider
             mix('/js/flexible_content.js', ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH));
         $this->dashboard->registerResource('stylesheets',
             mix('/css/flexible_content.css', ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH));
+
+        return $this;
+    }
+
+    /**
+     * Registering languages
+     *
+     * @return self
+     */
+    private function registerTranslations(): self
+    {
+        $this->loadJsonTranslationsFrom(realpath(ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH.'/resources/lang/'));
 
         return $this;
     }

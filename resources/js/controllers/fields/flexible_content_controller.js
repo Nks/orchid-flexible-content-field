@@ -27,7 +27,8 @@ export default class extends Controller {
     layoutSelect(event) {
         event.preventDefault();
 
-        let layoutName = event.target.dataset.layout;
+        let selectedLayout = event.target,
+            layoutName = event.target.dataset.layout;
 
         if (!(layoutName in this.layouts)) {
             window.platform.alert(`Can't fetch layout ${layoutName}`, 'error');
@@ -37,13 +38,17 @@ export default class extends Controller {
 
         const layout = this.layouts[layoutName];
 
-        this.draw(layoutName, layout);
+        this.draw(layoutName, layout, selectedLayout);
 
         this.checkEmpty();
     }
 
-    draw(name, layout) {
-        let html = layout.element.innerHTML;
+    draw(name, layout, original) {
+        let html = layout.element.innerHTML,
+            index = original.dataset.index,
+            count = this.blocksTarget.querySelectorAll('.layout').length;
+
+        html = html.replace(new RegExp(index, 'g'), count);
 
         this.blocksTarget.insertAdjacentHTML('beforeend', html);
     }
@@ -54,6 +59,10 @@ export default class extends Controller {
 
     delete(event) {
         console.log(event);
+
+        event.target.closest('.layout').remove();
+
+        this.sort();
     }
 
     fetchLayouts() {
@@ -69,8 +78,6 @@ export default class extends Controller {
                 name: name
             };
         });
-
-        console.log(this.layouts);
     }
 
     /**
@@ -79,13 +86,16 @@ export default class extends Controller {
     initDragDrop() {
         let self = this;
 
-        dragula([this.repeaterContainerTarget], {
+        dragula([this.blocksTarget], {
             moves: function (el, container, handle) {
                 return handle.classList.contains('card-handle');
             }
         }).on('drop', function () {
             self.sort();
         });
+    }
+
+    sort() {
     }
 
     disconnect() {

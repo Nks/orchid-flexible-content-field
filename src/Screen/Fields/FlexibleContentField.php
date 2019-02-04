@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Nakukryskin\OrchidFlexibleContentField\Screen\Fields;
 
+use Nakukryskin\OrchidFlexibleContentField\Screen\Layouts\FlexibleContentLayout;
 use Orchid\Screen\Field;
 
 /**
@@ -57,11 +58,20 @@ class FlexibleContentField extends Field
         'name',
     ];
 
+    /**
+     * Set flexible content layouts
+     *
+     * @param array $layouts
+     * @return FlexibleContentField
+     */
     public function layouts(array $layouts): self
     {
-        $this->set('layouts', collect(array_map(function ($item) {
-            return new $item($this);
-        }, $layouts)));
+        $this->set('layouts', collect($layouts)->mapWithKeys(function (string $item) {
+            /** @var FlexibleContentLayout $layout */
+            $layout = new $item($this);
+
+            return [$layout->name() => $layout];
+        }));
 
         return $this;
     }
@@ -74,6 +84,6 @@ class FlexibleContentField extends Field
      */
     public static function make(string $name): self
     {
-        return (new static)->name($name)->set('original_name', $name)->value([]);
+        return (new static)->name($name)->set('original_name', $name);
     }
 }
