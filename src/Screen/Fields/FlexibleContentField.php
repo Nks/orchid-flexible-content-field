@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Nakukryskin\OrchidFlexibleContentField\Screen\Fields;
 
-use Nakukryskin\OrchidFlexibleContentField\Screen\Layouts\FlexibleContentLayout;
 use Orchid\Screen\Field;
+use Nakukryskin\OrchidFlexibleContentField\Screen\Layouts\FlexibleContentLayout;
 
 /**
  * Creating flexible content fields.
@@ -59,7 +59,7 @@ class FlexibleContentField extends Field
     ];
 
     /**
-     * Set flexible content layouts
+     * Set flexible content layouts.
      *
      * @param array $layouts
      * @return FlexibleContentField
