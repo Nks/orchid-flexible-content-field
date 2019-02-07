@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Nakukryskin\OrchidFlexibleContentField\Providers;
 
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Nakukryskin\OrchidFlexibleContentField\Observers\FlexibleContentObserver;
-use Orchid\Platform\Dashboard;
 use Orchid\Press\Models\Page;
 use Orchid\Press\Models\Post;
+use Orchid\Platform\Dashboard;
+use Nakukryskin\OrchidFlexibleContentField\Observers\FlexibleContentObserver;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
  * Class EventServiceProvider.
