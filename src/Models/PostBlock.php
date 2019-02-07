@@ -7,9 +7,9 @@ namespace Orchid\Press\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Post.
+ * Class PostBlocks.
  */
-class PageBlock extends Model
+class PostBlock extends Model
 {
     /**
      * @var string
