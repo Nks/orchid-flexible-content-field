@@ -12,8 +12,6 @@ use Orchid\Press\Models\Post;
 
 /**
  * Class EventServiceProvider.
- *
- * @package Nakukryskin\OrchidFlexibleContentField\Providers
  */
 class EventServiceProvider extends ServiceProvider
 {

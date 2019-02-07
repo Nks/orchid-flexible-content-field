@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Nakukryskin\OrchidFlexibleContentField\Screen\Layouts;
@@ -9,14 +10,13 @@ use Orchid\Screen\Layouts\Base;
 use Orchid\Screen\Repository;
 
 /**
- * Class FlexibleContentLayout
- * @package Nakukryskin\OrchidFlexibleContentField\Screen\Layouts
+ * Class FlexibleContentLayout.
  */
 abstract class FlexibleContentLayout extends Base
 {
     const BLOCK_TEMPLATE = 'platform::partials.fields.flexible_content_block';
     /**
-     * Current template
+     * Current template.
      *
      * @var string
      */
@@ -35,7 +35,7 @@ abstract class FlexibleContentLayout extends Base
     public $field;
 
     /**
-     * Pre-generated field index
+     * Pre-generated field index.
      *
      * @var string
      */
@@ -44,14 +44,14 @@ abstract class FlexibleContentLayout extends Base
     /**
      * Minimum layouts.
      *
-     * @var integer
+     * @var int
      */
     public $min;
 
     /**
      * Maximum layouts.
      *
-     * @var integer
+     * @var int
      */
     public $max;
 
@@ -127,7 +127,6 @@ abstract class FlexibleContentLayout extends Base
      */
     public function getFormPrefix(): string
     {
-
         return (string)$this->field->get('name').'['.$this->fieldIndex.']';
     }
 

@@ -1,22 +1,22 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Nakukryskin\OrchidFlexibleContentField\Screen;
 
+use Orchid\Screen\Repository;
 use Illuminate\Support\Collection;
 use Nakukryskin\OrchidFlexibleContentField\Screen\Layouts\FlexibleContentLayout;
-use Orchid\Screen\Repository;
 
 /**
  * Rendering the flexible content form.
  *
  * Class Builder
- * @package Nakukryskin\OrchidFlexibleContentField\Screen
  */
 class Builder extends \Orchid\Screen\Builder
 {
     /**
-     * Render form with the values
+     * Render form with the values.
      *
      * @param Collection $layouts
      * @param array $values
@@ -42,14 +42,14 @@ class Builder extends \Orchid\Screen\Builder
             }
 
             //skip not existing layouts
-            if (!$layouts->has($layoutName)) {
+            if (! $layouts->has($layoutName)) {
                 continue;
             }
 
             /** @var FlexibleContentLayout $layout */
             $layout = $layouts->get($layoutName);
 
-            throw_if(!($layout instanceof FlexibleContentLayout),
+            throw_if(! ($layout instanceof FlexibleContentLayout),
                 new \Exception(sprintf('%s is not flexible content layout', class_basename($layout))));
 
             //bail the layout

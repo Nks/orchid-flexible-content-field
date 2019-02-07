@@ -10,8 +10,7 @@ use Nakukryskin\OrchidFlexibleContentField\Screen\Fields\FlexibleContentField;
 use Orchid\Platform\Dashboard;
 
 /**
- * Class ServiceProvider
- * @package Nakukryskin\OrchidFlexibleContentField\Providers
+ * Class ServiceProvider.
  */
 class ServiceProvider extends BaseServiceProvider
 {
@@ -54,6 +53,7 @@ class ServiceProvider extends BaseServiceProvider
         if (!defined('ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH')) {
             define('ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH', realpath(__DIR__.'/../../'));
         }
+
 
         if (!defined('ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH')) {
             define('ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH', 'flexible-content-field');
@@ -149,7 +149,7 @@ class ServiceProvider extends BaseServiceProvider
     }
 
     /**
-     * Registering languages
+     * Registering languages.
      *
      * @return self
      */
