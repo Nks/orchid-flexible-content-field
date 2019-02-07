@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Post.
  */
-class PostBlocks extends Model
+class PageBlock extends Model
 {
     /**
      * @var string

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Nakukryskin\OrchidFlexibleContentField\Providers;
 
+use Orchid\Platform\Dashboard;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Nakukryskin\OrchidFlexibleContentField\Commands\LinkCommand;
 use Nakukryskin\OrchidFlexibleContentField\Screen\Fields\FlexibleContentField;
-use Orchid\Platform\Dashboard;
 
 /**
  * Class ServiceProvider.
@@ -50,12 +50,11 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function register()
     {
-        if (!defined('ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH')) {
+        if (! defined('ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH')) {
             define('ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH', realpath(__DIR__.'/../../'));
         }
 
-
-        if (!defined('ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH')) {
+        if (! defined('ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH')) {
             define('ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH', 'flexible-content-field');
         }
 
@@ -136,7 +135,7 @@ class ServiceProvider extends BaseServiceProvider
      */
     private function registerResources(): self
     {
-        if (!file_exists(public_path(ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH))) {
+        if (! file_exists(public_path(ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH))) {
             return $this;
         }
 

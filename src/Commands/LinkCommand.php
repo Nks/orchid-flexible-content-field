@@ -7,8 +7,7 @@ namespace Nakukryskin\OrchidFlexibleContentField\Commands;
 use Illuminate\Console\Command;
 
 /**
- * Class LinkCommand
- * @package Nakukryskin\OrchidFlexibleContentField\Commands
+ * Class LinkCommand.
  */
 class LinkCommand extends Command
 {
@@ -52,7 +51,7 @@ class LinkCommand extends Command
      */
     private function updateGitIgnore(): void
     {
-        if (!file_exists(app_path('../.gitignore'))) {
+        if (! file_exists(app_path('../.gitignore'))) {
             $this->warn('Unable to locate ".gitignore".  Did you move this file?');
             $this->warn('A semantic link to public files was not added to the ignore list');
 

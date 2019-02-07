@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Nakukryskin\OrchidFlexibleContentField\Screen\Layouts;
 
+use Orchid\Screen\Repository;
+use Orchid\Screen\Layouts\Base;
 use Nakukryskin\OrchidFlexibleContentField\Screen\Builder;
 use Nakukryskin\OrchidFlexibleContentField\Screen\Fields\FlexibleContentField;
-use Orchid\Screen\Layouts\Base;
-use Orchid\Screen\Repository;
 
 /**
  * Class FlexibleContentLayout.
@@ -127,7 +127,7 @@ abstract class FlexibleContentLayout extends Base
      */
     public function getFormPrefix(): string
     {
-        return (string)$this->field->get('name').'['.$this->fieldIndex.']';
+        return (string) $this->field->get('name').'['.$this->fieldIndex.']';
     }
 
     /**
@@ -137,6 +137,6 @@ abstract class FlexibleContentLayout extends Base
      */
     public function getContainerKey(): string
     {
-        return (string)$this->field->get('name');
+        return (string) $this->field->get('name');
     }
 }
