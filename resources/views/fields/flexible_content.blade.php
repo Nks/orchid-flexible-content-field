@@ -1,15 +1,16 @@
 @component($typeForm,get_defined_vars())
-    <div class="flexible-content"
+    <div class="flexible-content loading"
          data-controller="fields--flexible_content"
          data-name="{{ $name }}">
+        <input type="hidden" name="{{ $name }}" value=""/>
         <div class="row">
             <div class="col-md-12">
-                <section class="content b wrapper-xs mb-2 @if(empty($value)) empty @endif"
+                <section class="content b wrapper-xs mb-2 @if(!$value) empty @endif"
                          data-target="fields--flexible_content.content">
                     <div class="no-value-message">
                         {{ __('Click the "Add Block" button below to start creating your layout') }}
                     </div>
-                    <div data-target="fields--flexible_content.blocks">
+                    <div data-target="fields--flexible_content.blocks" data-container-key="{{ $name }}">
                         {!! \Nakukryskin\OrchidFlexibleContentField\Screen\Builder::buildFlexibleLayout($layouts, $value) !!}
                     </div>
                 </section>

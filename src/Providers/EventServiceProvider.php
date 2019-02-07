@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Nakukryskin\OrchidFlexibleContentField\Providers;
 
-use Orchid\Press\Models\Post;
-use Nakukryskin\OrchidFlexibleContentField\Observers\FlexibleContentObserver;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Nakukryskin\OrchidFlexibleContentField\Observers\FlexibleContentObserver;
+use Orchid\Platform\Dashboard;
+use Orchid\Press\Models\Page;
+use Orchid\Press\Models\Post;
 
 /**
- * Class EventServiceProvider
+ * Class EventServiceProvider.
+ *
  * @package Nakukryskin\OrchidFlexibleContentField\Providers
  */
 class EventServiceProvider extends ServiceProvider
@@ -29,6 +32,7 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        Post::observe(FlexibleContentObserver::class);
+        Dashboard::modelClass(Post::class)::observe(FlexibleContentObserver::class);
+        Dashboard::modelClass(Page::class)::observe(FlexibleContentObserver::class);
     }
 }

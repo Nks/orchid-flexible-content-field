@@ -23,12 +23,23 @@ class Builder extends \Orchid\Screen\Builder
      * @return null|string
      * @throws \Throwable
      */
-    public static function buildFlexibleLayout(Collection $layouts, array $values)
+    public static function buildFlexibleLayout(Collection $layouts, $values = null)
     {
+        if (!is_array($values)) {
+            $values = array_wrap($values);
+        }
         $form = '';
-        foreach ($values as $index => $value) {
-            $layoutName = head(array_keys($value));
-            $data = head($value);
+
+        foreach ($values as $index => $data) {
+            if (!is_array($data)) {
+                continue;
+            }
+
+            $layoutName = array_get($data, '_fc_layout');
+
+            if (!$layoutName) {
+                continue;
+            }
 
             //skip not existing layouts
             if (!$layouts->has($layoutName)) {
@@ -54,7 +65,7 @@ class Builder extends \Orchid\Screen\Builder
 
             $layout->template = FlexibleContentLayout::BLOCK_TEMPLATE;
 
-            $form .= $layout->build($data);
+            $form .= $layout->build($data, (string)$index);
         }
 
         return $form;

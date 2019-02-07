@@ -22,12 +22,20 @@
     }
     > .card-header {
       .actions {
+        margin: 0;
         span {
+          vertical-align: baseline;
+          font-size: 75%;
+
           &.action {
             cursor: pointer;
           }
 
-          &.badge {
+          &.card-handle {
+            cursor: move;
+          }
+
+          &.layout-index {
             opacity: 0.3;
           }
         }
@@ -38,5 +46,14 @@
 
   &-layouts {
     display: none;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

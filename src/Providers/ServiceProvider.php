@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Nakukryskin\OrchidFlexibleContentField\Providers;
 
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Nakukryskin\OrchidFlexibleContentField\Commands\LinkCommand;
 use Nakukryskin\OrchidFlexibleContentField\Screen\Fields\FlexibleContentField;
 use Orchid\Platform\Dashboard;
 
@@ -55,7 +56,7 @@ class ServiceProvider extends BaseServiceProvider
         }
 
         if (!defined('ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH')) {
-            define('ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH', 'vendor/platform/flexible-content-field');
+            define('ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH', 'flexible-content-field');
         }
 
         // Register the service the package provides.
@@ -104,8 +105,13 @@ class ServiceProvider extends BaseServiceProvider
 
         // Publishing assets.
         $this->publishes([
-            ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH.'/resources/public' => public_path('vendor/platform/flexible-content-field'),
+            ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH.'/public' => public_path(ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH),
         ], 'flexible-content-field.assets');
+
+        // Registering package commands.
+        $this->commands([
+            LinkCommand::class,
+        ]);
 
         return $this;
     }

@@ -66,10 +66,11 @@ abstract class FlexibleContentLayout extends Base
      *
      * @param \Orchid\Screen\Repository $query
      *
+     * @param string|null $index
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Throwable
      */
-    public function build(Repository $query)
+    public function build(Repository $query, string $index = null)
     {
         $this->query = $query;
         $form = new Builder($this->fields(), $query);
@@ -77,7 +78,10 @@ abstract class FlexibleContentLayout extends Base
         $form->setPrefix($this->getFormPrefix());
 
         return view($this->template, [
+            'layout' => $this,
             'name' => $this->name(),
+            'title' => $this->title(),
+            'index' => $index,
             'form' => $form->generateForm(),
         ]);
     }
@@ -105,6 +109,7 @@ abstract class FlexibleContentLayout extends Base
 
     /**
      * Set the field index for the javascript replacement.
+     *
      * @param string $index
      * @return FlexibleContentLayout
      */
@@ -120,9 +125,19 @@ abstract class FlexibleContentLayout extends Base
      *
      * @return string
      */
-    public function getFormPrefix()
+    public function getFormPrefix(): string
     {
 
-        return $this->field->get('name').'['.$this->fieldIndex.']['.$this->name().']';
+        return (string)$this->field->get('name').'['.$this->fieldIndex.']';
+    }
+
+    /**
+     * Return original name of the field.
+     *
+     * @return string
+     */
+    public function getContainerKey(): string
+    {
+        return (string)$this->field->get('name');
     }
 }

@@ -17,6 +17,7 @@
     "laravel-mix": "^4.0.13",
     "node-sass": "^4.11.0",
     "open-color": "^1.6.3",
+    "randomstring": "^1.1.5",
     "squirrelly": "^7.0.4",
     "stimulus": "^1.1.1"
   },
