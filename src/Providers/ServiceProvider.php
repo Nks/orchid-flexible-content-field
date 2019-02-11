@@ -4,16 +4,20 @@ declare(strict_types=1);
 
 namespace Nakukryskin\OrchidFlexibleContentField\Providers;
 
-use Orchid\Platform\Dashboard;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Nakukryskin\OrchidFlexibleContentField\Commands\LinkCommand;
 use Nakukryskin\OrchidFlexibleContentField\Screen\Fields\FlexibleContentField;
+use Orchid\Platform\Dashboard;
 
 /**
  * Class ServiceProvider.
  */
 class ServiceProvider extends BaseServiceProvider
 {
+    /**
+     * Required version of orchid/platform package.
+     */
+    const REQUIRED_ORCHID_PLATFORM_VERSION = '3.8.1';
     /**
      * @var Dashboard
      */
@@ -30,7 +34,8 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->dashboard = $dashboard;
 
-        $this->registerResources()
+        $this->versionCompare()
+            ->registerResources()
             ->registerDatabase()
             ->registerProviders()
             ->registerTranslations();
@@ -50,12 +55,8 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function register()
     {
-        if (! defined('ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH')) {
+        if (!defined('ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH')) {
             define('ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH', realpath(__DIR__.'/../../'));
-        }
-
-        if (! defined('ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH')) {
-            define('ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH', 'flexible-content-field');
         }
 
         // Register the service the package provides.
@@ -102,11 +103,6 @@ class ServiceProvider extends BaseServiceProvider
             ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH.'/resources/views' => base_path('resources/views/vendor/platform'),
         ], 'platform');
 
-        // Publishing assets.
-        $this->publishes([
-            ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH.'/public' => public_path(ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH),
-        ], 'flexible-content-field.assets');
-
         // Registering package commands.
         $this->commands([
             LinkCommand::class,
@@ -135,14 +131,12 @@ class ServiceProvider extends BaseServiceProvider
      */
     private function registerResources(): self
     {
-        if (! file_exists(public_path(ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH))) {
-            return $this;
-        }
+        $this->dashboard->addPublicDirectory('flexible_content', ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH.'/public/');
 
-        $this->dashboard->registerResource('scripts',
-            mix('/js/flexible_content.js', ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH));
-        $this->dashboard->registerResource('stylesheets',
-            mix('/css/flexible_content.css', ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH));
+        \View::composer('platform::layouts.app', function () {
+            \Dashboard::registerResource('scripts', orchid_mix('/js/flexible_content.js', 'flexible_content'))
+                ->registerResource('stylesheets', orchid_mix('/css/flexible_content.css', 'flexible_content'));
+        });
 
         return $this;
     }
@@ -154,7 +148,21 @@ class ServiceProvider extends BaseServiceProvider
      */
     private function registerTranslations(): self
     {
-        $this->loadJsonTranslationsFrom(realpath(ORCHID_FLEXIBLE_CONTENT_PUBLIC_ASSET_PATH.'/resources/lang/'));
+        $this->loadJsonTranslationsFrom(realpath(ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH.'/resources/lang/'));
+
+        return $this;
+    }
+
+    /**
+     * Check that the package has correct orchid platform version.
+     * @throws \Exception
+     */
+    private function versionCompare()
+    {
+        if (!version_compare(\Dashboard::version(), self::REQUIRED_ORCHID_PLATFORM_VERSION, '>=')) {
+            throw new \Exception(sprintf(__('You cannot install %1$s because %1$s requires orchid/platform version %2$s or higher. You are running orchid/platform version %3$s.'),
+                self::class, self::REQUIRED_ORCHID_PLATFORM_VERSION, \Orchid\Platform\Dashboard::VERSION));
+        }
 
         return $this;
     }

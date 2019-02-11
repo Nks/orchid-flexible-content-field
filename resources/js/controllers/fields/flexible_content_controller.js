@@ -25,6 +25,26 @@ export default class extends Controller {
     }
 
     /**
+     * Fetching layouts
+     */
+    fetchLayouts() {
+        this.layoutTargets.forEach((layout) => {
+            const name = layout.dataset.name;
+
+            if (name in this.layouts) {
+                return;
+            }
+
+            this.layouts[name] = {
+                name: name,
+                element: layout
+            };
+        });
+
+        return this;
+    }
+
+    /**
      * Select layout listener. Adding layout when it selected from the dropdown.
      *
      * @param event
@@ -37,7 +57,7 @@ export default class extends Controller {
             layoutName = event.target.dataset.layout;
 
         if (!(layoutName in this.layouts)) {
-            window.platform.alert(`Can't fetch layout ${layoutName}`, 'error');
+            window.platform.alert(`Can't fetch layout ${layoutName}`, 'danger');
 
             return false;
         }
@@ -61,7 +81,6 @@ export default class extends Controller {
             index = original.dataset.index,
             key = this.getKey();
 
-        //TODO Review these regexps
         html = html
             .replace(new RegExp(index, 'g'), key)
             .replace(new RegExp('data-fc_key=""'), 'data-fc_key="' + key + '"');
@@ -89,26 +108,6 @@ export default class extends Controller {
         event.target.closest('.layout').remove();
 
         this.checkEmpty().reorder();
-
-        return this;
-    }
-
-    /**
-     * Fetching layouts
-     */
-    fetchLayouts() {
-        this.layoutTargets.forEach((layout) => {
-            const name = layout.dataset.name;
-
-            if (name in this.layouts) {
-                return;
-            }
-
-            this.layouts[name] = {
-                element: layout,
-                name: name
-            };
-        });
 
         return this;
     }
@@ -148,6 +147,33 @@ export default class extends Controller {
     }
 
     /**
+     * Reordering all blocks to keep order correct
+     */
+    reorder() {
+        this.blocksTarget.querySelectorAll('.layout[data-fc_key]').forEach((block) => {
+            const newKey = this.getKey(),
+                oldKey = block.dataset.fc_key;
+
+            block.dataset.fc_key = newKey;
+
+            let inputs = block.querySelectorAll('[name*="' + oldKey + '"]');
+
+            inputs.forEach((input) => {
+                const oldName = input.getAttribute('name'),
+                    newName = oldName.replace(new RegExp(oldKey, 'g'), newKey);
+
+                input.setAttribute('name', newName);
+            });
+        });
+
+        this.layoutIndexTargets.forEach((index, key) => {
+            index.innerHTML = key + 1;
+        });
+
+        return this;
+    }
+
+    /**
      * Generating the unique id
      *
      * @param prefix
@@ -155,19 +181,6 @@ export default class extends Controller {
      * @returns {*}
      */
     uniqid(prefix, moreEntropy) {
-        //  discuss at: http://locutus.io/php/uniqid/
-        // original by: Kevin van Zonneveld (http://kvz.io)
-        //  revised by: Kankrelune (http://www.webfaktory.info/)
-        //      note 1: Uses an internal counter (in locutus global) to avoid collision
-        //   example 1: var $id = uniqid()
-        //   example 1: var $result = $id.length === 13
-        //   returns 1: true
-        //   example 2: var $id = uniqid('foo')
-        //   example 2: var $result = $id.length === (13 + 'foo'.length)
-        //   returns 2: true
-        //   example 3: var $id = uniqid('bar', true)
-        //   example 3: var $result = $id.length === (23 + 'bar'.length)
-        //   returns 3: true
         if (typeof prefix === 'undefined') {
             prefix = '';
         }
@@ -198,34 +211,6 @@ export default class extends Controller {
         }
 
         return retId;
-    }
-
-    /**
-     * Reordering all blocks to keep order correct
-     */
-    reorder() {
-        this.blocksTarget.querySelectorAll('.layout[data-fc_key]').forEach((block) => {
-            const newKey = this.getKey(),
-                oldKey = block.dataset.fc_key;
-
-            block.dataset.fc_key = newKey;
-
-            let inputs = block.querySelectorAll('[name*="' + oldKey + '"]');
-
-            inputs.forEach((input) => {
-                const oldName = input.getAttribute('name'),
-                    newName = oldName.replace(new RegExp(oldKey, 'g'), newKey);
-
-                input.setAttribute('name', newName);
-            });
-        });
-
-        this.layoutIndexTargets.forEach((index, key) => {
-            index.innerHTML = key + 1;
-        });
-
-        return this;
-
     }
 
     /**
