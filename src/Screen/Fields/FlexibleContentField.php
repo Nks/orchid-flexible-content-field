@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Nakukryskin\OrchidFlexibleContentField\Screen\Fields;
 
-use Orchid\Screen\Field;
 use Nakukryskin\OrchidFlexibleContentField\Screen\Layouts\FlexibleContentLayout;
+use Orchid\Screen\Field;
 
 /**
  * Creating flexible content fields.
@@ -46,6 +46,7 @@ class FlexibleContentField extends Field
     public $attributes = [
         'class' => 'form-control',
         'original_name' => null,
+        'template' => null,
     ];
 
     /**
@@ -56,6 +57,7 @@ class FlexibleContentField extends Field
     public $inlineAttributes = [
         'required',
         'name',
+        'template'
     ];
 
     /**
@@ -84,6 +86,6 @@ class FlexibleContentField extends Field
      */
     public static function make(string $name): self
     {
-        return (new static)->name($name)->set('original_name', $name);
+        return (new static)->name($name)->set('original_name', $name)->set('template', 'fc_template_'.str_random(32));
     }
 }

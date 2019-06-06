@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Nakukryskin\OrchidFlexibleContentField\Providers;
 
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-use Nakukryskin\OrchidFlexibleContentField\Commands\LinkCommand;
 use Nakukryskin\OrchidFlexibleContentField\Screen\Fields\FlexibleContentField;
 use Orchid\Platform\Dashboard;
 
@@ -102,11 +101,6 @@ class ServiceProvider extends BaseServiceProvider
         $this->publishes([
             ORCHID_FLEXIBLE_CONTENT_FIELD_PACKAGE_PATH.'/resources/views' => base_path('resources/views/vendor/platform'),
         ], 'platform');
-
-        // Registering package commands.
-        $this->commands([
-            LinkCommand::class,
-        ]);
 
         return $this;
     }

@@ -1,6 +1,7 @@
 @component($typeForm,get_defined_vars())
     <div class="flexible-content loading"
          data-controller="fields--flexible_content"
+         data-fields--flexible_content-options="{{ json_encode($attributes) }}"
          data-name="{{ $name }}">
         <input type="hidden" name="{{ $name }}" value=""/>
         <div class="row">

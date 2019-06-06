@@ -17,7 +17,15 @@ export default class extends Controller {
 
     uniqidSeed = '';
 
+    options = {
+        template: null
+    };
+
     connect() {
+        this.options = Object.assign(this.options, JSON.parse(this.data.get('options')));
+
+        console.log(this.options);
+
         this.fetchLayouts();
         this.initDragDrop();
         this.checkEmpty();
@@ -28,18 +36,31 @@ export default class extends Controller {
      * Fetching layouts
      */
     fetchLayouts() {
-        this.layoutTargets.forEach((layout) => {
-            const name = layout.dataset.name;
+        let fcLayoutName = this.options.template,
+            layouts = document.querySelectorAll(`[data-fc-field-template-name="${fcLayoutName}"]`);
+
+        if (!layouts.length) {
+            window.platform.alert(`Flexible content field with key "${fcLayoutName}" hasn't any templates.`);
+
+            return;
+        }
+
+        layouts.forEach((layout) => {
+            const name = layout.dataset.fcLayoutName;
 
             if (name in this.layouts) {
+                console.error(`Layout ${name} already exists in ${fcLayoutName}`);
+
                 return;
             }
 
             this.layouts[name] = {
                 name: name,
-                element: layout
+                element: layout.innerHTML
             };
         });
+
+        console.log(this.layouts);
 
         return this;
     }
@@ -77,13 +98,15 @@ export default class extends Controller {
      * @param original
      */
     draw(name, layout, original) {
-        let html = layout.element.innerHTML,
+        let html = layout.element,
             index = original.dataset.index,
             key = this.getKey();
 
         html = html
             .replace(new RegExp(index, 'g'), key)
             .replace(new RegExp('data-fc_key=""'), 'data-fc_key="' + key + '"');
+
+        console.log(html);
 
         this.blocksTarget.insertAdjacentHTML('beforeend', html);
 
